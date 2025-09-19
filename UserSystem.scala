@@ -3,7 +3,7 @@
 // User IDs must be positive integers, names, emails, and roles must be non-empty strings
 case class UserSystem(private val users: Map[Int, User] = Map.empty) {
 
-  // if id not exist, create user otherwise no change
+  // if id not exist -> create user, otherwise -> no change
   def addUser(u: User): UserSystem =
     if (users.contains(u.id)) this else copy(users = users + (u.id -> u))
 
@@ -11,11 +11,11 @@ case class UserSystem(private val users: Map[Int, User] = Map.empty) {
   def removeUser(id: Int): UserSystem =
     if (users.contains(id)) copy(users = users - id) else this
 
-  // Update an existing user by id (only if id exists, otherwise no change)
+  // If id exists -> Update an existing user (otherwise no change)
   def updateUser(u: User): UserSystem =
     if (users.contains(u.id)) copy(users = users + (u.id -> u)) else this
 
-  // Find user by id, return Option[User]
+  // Find user by id
   def findUser(id: Int): Option[User] = users.get(id)
 
   // Return all users as an immutable Map
