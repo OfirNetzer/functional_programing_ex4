@@ -1,11 +1,12 @@
-// Generic Monoid type class
+// Generic Monoid implementation for UserSystem
+// A monoid is an algebraic structure with a single associative binary operation and an identity element
 trait Monoid[A] {
   def empty: A
   def combine(x: A, y: A): A
 }
 
-// Monoid instance for UserSystem: immutable union, right-biased on id conflicts.
-// Laws: see discussion at bottom of file.
+// Monoid instance specifically for UserSystem, combining two UserSystems
+// In case of conflict (same user ID), the user from the second system is kept
 object UserSystemMonoid extends Monoid[UserSystem] {
   override val empty: UserSystem = UserSystem()
 
