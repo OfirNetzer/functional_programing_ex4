@@ -10,9 +10,9 @@ object UserSystemMonoid extends Monoid[UserSystem] {
   override val empty: UserSystem = UserSystem()
 
   override def combine(x: UserSystem, y: UserSystem): UserSystem = {
-    // Right-biased union on conflicting ids (keep y's value)
-    val merged: Map[Int, User] = x.getAllUsers ++ y.getAllUsers
-    UserSystem(merged)
+    // in case of conflict (keep y's value)
+    val allUsers: Map[Int, User] = x.getAllUsers ++ y.getAllUsers
+    UserSystem(allUsers)
   }
 }
 
