@@ -1,37 +1,43 @@
-// A simple user management system in Scala
-// All operations return a NEW UserSystem instance (no mutation).
-// User IDs must be positive integers, names, emails, and roles must be non-empty strings
-case class UserSystem(private val users: Map[Int, User] = Map.empty) {
 
-  // if id not exist, create user otherwise no change
-  def addUser(u: User): UserSystem = {
-    require(u.id > 0, "User ID must be positive")
-    require(u.name.nonEmpty, "User name cannot be empty")
-    require(u.email.nonEmpty, "User email cannot be empty")
-    require(u.role.nonEmpty, "User role cannot be empty")
-    if (users.contains(u.id)) this else copy(users = users + (u.id -> u))
+class UserSystem(private val users: Map[Int, User] = Map.empty) {
+  
+  def addUser(user: User): UserSystem = {
+    if (users.contains(user.id)) {
+      this // Don't add if user with same ID already exists
+    } else {
+      new UserSystem(users + (user.id -> user))
+    }
   }
-
-  // Given the user id, remove the user (only if id exists, otherwise no change)
-  def removeUser(id: Int): UserSystem =
-    if (users.contains(id)) copy(users = users - id) else this
-
-  // Update an existing user by id (only if id exists, otherwise no change)
-  def updateUser(u: User): UserSystem = {
-    require(u.id > 0, "User ID must be positive")
-    require(u.name.nonEmpty, "User name cannot be empty")
-    require(u.email.nonEmpty, "User email cannot be empty")
-    require(u.role.nonEmpty, "User role cannot be empty")
-    if (users.contains(u.id)) copy(users = users + (u.id -> u)) else this
+  
+  def removeUser(id: Int): UserSystem = {
+    new UserSystem(users - id)
   }
-
-  // Find user by id, return Option[User]
-  def findUser(id: Int): Option[User] = users.get(id)
-
-  // Return all users as an immutable Map
-  def getAllUsers: Map[Int, User] = users
-
-  // Additional utility methods
+  
+  def updateUser(user: User): UserSystem = {
+    if (users.contains(user.id)) {
+      new UserSystem(users + (user.id -> user))
+    } else {
+      this // Don't update if user doesn't exist
+    }
+  }
+  
+  def findUser(id: Int): Option[User] = {
+    users.get(id)
+  }
+  
+  def getAllUsers: Map[Int, User] = {
+    users
+  }
+  
+  // Utility methods for convenience
   def size: Int = users.size
+  
   def isEmpty: Boolean = users.isEmpty
+  
+  override def equals(other: Any): Boolean = other match {
+    case that: UserSystem => this.users == that.users
+    case _ => false
+  }
+  
+  override def hashCode(): Int = users.hashCode()
 }
