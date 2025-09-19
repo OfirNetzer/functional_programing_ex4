@@ -1,5 +1,5 @@
 // A simple user management system in Scala
-// All operations return a new UserSystem instance.
+// each operation returns a new UserSystem instance.
 // User IDs must be positive integers, names, emails, and roles must be non-empty strings
 case class UserSystem(private val users: Map[Int, User] = Map.empty) {
 
